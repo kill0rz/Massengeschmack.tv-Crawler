@@ -71,7 +71,7 @@ function crawlit() {
 	}
 }
 
-//einlogen
+//einloggen
 $URL = "https://massengeschmack.tv/index_login.php";
 $seite = getsite($URL, "email=" . urlencode($username) . "&password=" . urlencode($passwd));
 crawlit();
