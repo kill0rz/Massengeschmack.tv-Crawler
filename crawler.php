@@ -1,7 +1,7 @@
 <?php
 
 //config
-$mailto = ""; //An wen sollen die Mails geschickt werden?
+$mailto = array("a@example.com", "b@example.com"); //An wen sollen die Mails geschickt werden?
 
 $username = ""; //LogIn von MG
 $passwd = ""; //Passwort von MG
@@ -84,5 +84,7 @@ foreach ($cats[0] as $value) {
 }
 
 if ($maillinks != '') {
-	mail($mailto, "neue MG Links", $maillinks);
+	foreach ($mailto as $mail) {
+		mail($mail, "neue MG Links", $maillinks);
+	}
 }
