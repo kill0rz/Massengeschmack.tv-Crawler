@@ -75,7 +75,7 @@ function crawlit() {
 $URL = "https://massengeschmack.tv/index_login.php";
 $seite = getsite($URL, "email=" . urlencode($username) . "&password=" . urlencode($passwd));
 crawlit();
-preg_match_all("/\"\/mag\/[0-9a-zA-Z?=-]*\"/", $seite, $cats, PREG_OFFSET_CAPTURE);
+preg_match_all("/\"\/mag\/[0-9a-zA-Z?=+-]*\"/", $seite, $cats, PREG_OFFSET_CAPTURE);
 $cats = array_unique($cats);
 
 foreach ($cats[0] as $value) {
