@@ -55,7 +55,7 @@ function getsite($zielurl, $postdata = "", $ref = "", $newsess = true) {
 function crawlit() {
 	global $seite, $db, $maillinks;
 
-	preg_match_all('/href=\"\/clip\/[a-z0-9\-]*\"/', $seite, $matches, PREG_OFFSET_CAPTURE);
+	preg_match_all('/href=\"\/clip\/[a-zäöüÄÖÜA-Z0-9\-]*\"/', $seite, $matches, PREG_OFFSET_CAPTURE);
 
 	foreach ($matches[0] as $value) {
 		$link = "https://massengeschmack.tv" . trim(str_replace(array('href="', '"'), '', $value[0]));
@@ -75,7 +75,7 @@ function crawlit() {
 $URL = "https://massengeschmack.tv/index_login.php";
 $seite = getsite($URL, "email=" . urlencode($username) . "&password=" . urlencode($passwd));
 crawlit();
-preg_match_all("/\"\/mag\/[0-9a-zA-Z?=+-]*\"/", $seite, $cats, PREG_OFFSET_CAPTURE);
+preg_match_all("/\"\/mag\/[0-9a-zA-ZäöüÄÖÜ?=+-]*\"/", $seite, $cats, PREG_OFFSET_CAPTURE);
 $cats = array_unique($cats);
 
 foreach ($cats[0] as $value) {
