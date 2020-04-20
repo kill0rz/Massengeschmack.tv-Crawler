@@ -15,6 +15,10 @@ $db_host = "";
 // Konfiguration Ende
 
 $db = mysqli_connect($db_host, $db_nutzer, $db_pw, $db_db);
+if ($db->connect_errno) {
+	printf("Connection failed: %s \n", $mysqli->connect_error);
+	exit();
+}
 
 $maillinks = '';
 
@@ -49,13 +53,14 @@ function getsite($zielurl, $postdata = "", $ref = "", $newsess = true) {
 		array($zielurl, $postdata, $ref),
 	);
 	$temp = execute(0, true, $log_hoster, $newsess);
+
 	return $temp;
 }
 
-function crawlit() {
-	global $seite, $db, $maillinks;
+function crawlit($seite) {
+	global $db, $maillinks;
 
-	preg_match_all('/href=\"\/clip\/[a-zäöüÄÖÜA-Z0-9\-]*\"/', $seite, $matches, PREG_OFFSET_CAPTURE);
+	preg_match_all('/href=\"\/(clip|play)\/[äüöÄÖÜa-z0-9\-]*\"/', $seite, $matches, PREG_OFFSET_CAPTURE);
 
 	foreach ($matches[0] as $value) {
 		$link = "https://massengeschmack.tv" . trim(str_replace(array('href="', '"'), '', $value[0]));
@@ -74,13 +79,13 @@ function crawlit() {
 //einloggen
 $URL = "https://massengeschmack.tv/index_login.php";
 $seite = getsite($URL, "email=" . urlencode($username) . "&password=" . urlencode($passwd));
-crawlit();
-preg_match_all("/\"\/mag\/[0-9a-zA-ZäöüÄÖÜ?=+-]*\"/", $seite, $cats, PREG_OFFSET_CAPTURE);
+crawlit($seite);
+preg_match_all("/\"\/mag\/[0-9a-zäüöÄÜÖA-Z?=+-]*\"/", $seite, $cats, PREG_OFFSET_CAPTURE);
 $cats = array_unique($cats);
 
 foreach ($cats[0] as $value) {
 	$seite = getsite("https://massengeschmack.tv" . str_replace("\"", "", $value[0]));
-	crawlit();
+	crawlit($seite);
 }
 
 if ($maillinks != '') {
